@@ -1,5 +1,4 @@
-FROM jekyll/jekyll:builder
-MAINTAINER JG
+FROM jekyll/builder:latest
 
 # Install some jekyll plugins
 RUN apk add --no-cache --virtual .build-deps \
@@ -8,10 +7,10 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk add --no-cache \
         python \
     && gem install \
-        jekyll-archives \
-        jekyll-paginate-categories \
-        rouge \
-        pygments.rb \
+        jekyll-sitemap \
+        jekyll-last-modified-at \
+        rake \
+        html-proofer \
 
 # Clean
     && apk del -f .build-deps \
