@@ -1,22 +1,18 @@
 FROM jekyll/builder:latest
 
+ENV BUNDLE_HOME=/usr/local/bundle
+
 # Install some jekyll plugins
-RUN apk add --no-cache --virtual .build-deps \
-        build-base \
-        ruby-dev \
-    && apk add --no-cache \
-        python \
-    && gem install \
+RUN gem install --install-dir $BUNDLE_HOME \
         jekyll-sitemap \
         jekyll-last-modified-at \
         rake \
-        html-proofer \
+        html-proofer
 
-# Clean
-    && apk del -f .build-deps \
-    && docker-helper cleanup
+# Assign ownership to user jekyll:jekyll
+RUN chown -R jekyll:jekyll $BUNDLE_HOME
 
-VOLUME /src
+# Remove the bundle cache
+RUN rm -rf $BUNDLE_HOME/cache
+
 EXPOSE 4000
-
-WORKDIR /src
